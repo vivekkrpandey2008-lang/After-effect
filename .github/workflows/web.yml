@@ -1,0 +1,27 @@
+name: Build web and publish
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: sudo apt-get update && sudo apt-get install -y binaryen
+      - run: cargo xtask web
+      - run: cp packaging/web/_headers packaging/web/.htaccess target/web/dist/
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/web/dist
+          publish_branch: web-dist
+          force_orphan: true
