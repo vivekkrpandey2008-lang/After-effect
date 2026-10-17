@@ -1,0 +1,13 @@
+{
+  "appId": "ai.storyteller.effectcraft",
+  "appName": "EffectCraft",
+  "webDir": "www",
+  "backgroundColor": "#1b1c1f",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  }
+}
